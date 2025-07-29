@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard System Overview + Exchange Activity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  .hidden-section {
+    display: none !important;
+  }
+
+  /* Wallet & Alerts Section Specific Styles */
+  #section-walletalerts {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+</style>
+</head>
+<body class="bg-[#FFF4E8] text-black font-sans">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-black text-white flex flex-col items-center py-6 space-y-6">
+      <!-- Logo -->
+      <div class="bg-white rounded-full p-3">
+        <img src="https://github.com/kasozi785/image-hosting/blob/main/logo-01.svg?raw=true" alt="Logo" class="w-24 h-24" />
+      </div>
+
+      <!-- Menu Items -->
+      <nav class="flex flex-col space-y-5 text-sm font-semibold w-full">
+
+        <!-- Menue static -->
+        <div class="w-full flex flex-col items-center space-y-1 py-3 cursor-default select-none text-gray-400">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/menue-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">Menue</span>
+        </div>
+
+        <!-- Main clickable menus -->
+        <button id="menu-overview" class="w-full flex flex-col items-center space-y-1 py-3 hover:bg-gray-800 focus:outline-none">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/System%20overview-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">System Overview</span>
+        </button>
+
+        <button id="menu-exchange" class="w-full flex flex-col items-center space-y-1 py-3 hover:bg-gray-800 focus:outline-none">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/Exchange%20Activity-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">Exchange Activity</span>
+        </button>
+
+        <!-- Additional clickable menus -->
+        <button id="menu-wallets" class="w-full flex flex-col items-center space-y-1 py-3 hover:bg-gray-800 focus:outline-none">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/User%20Wallets-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">User Wallets</span>
+        </button>
+
+        <button id="menu-walletalerts" class="w-full flex flex-col items-center space-y-1 py-3 hover:bg-gray-800 focus:outline-none">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/Wallet%20%26%20System%20alerts-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">Wallet & Alerts</span>
+        </button>
+
+        <button id="menu-manualrequests" class="w-full flex flex-col items-center space-y-1 py-3 hover:bg-gray-800 focus:outline-none">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/Manual%20Requests-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">Manual Requests</span>
+        </button>
+
+        <button id="menu-adminsettings" class="w-full flex flex-col items-center space-y-1 py-3 hover:bg-gray-800 focus:outline-none">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/admin%20seetings-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">Admin Settings</span>
+        </button>
+
+        <button id="menu-reportscenter" class="w-full flex flex-col items-center space-y-1 py-3 hover:bg-gray-800 focus:outline-none">
+          <img src="https://github.com/kasozi785/image-hosting/blob/main/Reports%20Center-01.svg?raw=true" class="w-8 h-8" />
+          <span class="mt-1">Reports Center</span>
+        </button>
+
+      </nav>
+
+      <!-- Sign out clickable -->
+      <button id="menu-signout" class="mt-auto mb-2 text-xs text-left pl-6 w-full hover:text-orange-400 focus:outline-none">
+        Sign Out
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+<main class="flex-1 p-8 overflow-auto flex flex-col min-h-screen">
+      <!-- Dynamic title -->
+      <h1 id="page-title" class="text-2xl font-bold text-orange-600 mb-6">System Overview</h1>
+
+     <!-- System Overview Section -->
+<section id="section-overview">
+  <div class="bg-white rounded-2xl shadow p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-gray-700">System Overview</h2>
+
+    <!-- Tabs -->
+    <div class="flex space-x-4 mb-6">
+      <button id="tab-week" class="px-4 py-2 rounded bg-orange-400 text-white font-semibold">Week</button>
+      <button id="tab-daily" class="px-4 py-2 rounded bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300">Daily</button>
+    </div>
+
+    <!-- Chart -->
+    <div class="relative h-40 overflow-hidden">
+      <canvas id="transactionChart" class="w-full h-full"></canvas>
+    </div>
+  </div>
+
+  <!-- Add your boxes or metrics grid here -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <!-- boxes go here -->
+  </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+         <!-- Profits -->
+          <div class="bg-white rounded-2xl shadow p-6 md:col-span-2">
+            <h2 class="text-sm font-bold mb-4 text-gray-700">Profits</h2>
+            <div class="flex justify-between text-center space-x-6">
+              <div class="flex-1">
+                <p class="text-xs text-gray-500 mb-1">Today</p>
+                <p class="text-xl font-bold text-green-600">UGX 120,000</p>
+              </div>
+              <div class="flex-1">
+                <p class="text-xs text-gray-500 mb-1">Week</p>
+                <p class="text-xl font-bold text-green-600">UGX 850,000</p>
+              </div>
+              <div class="flex-1">
+                <p class="text-xs text-gray-500 mb-1">Month</p>
+                <p class="text-xl font-bold text-green-600">UGX 1,290,000</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Volume -->
+          <div class="bg-white rounded-2xl shadow p-6 md:col-span-2">
+            <h2 class="text-sm font-bold mb-4 text-gray-700">Total Volume</h2>
+            <div class="flex justify-between space-x-6">
+              <div class="flex flex-col items-center flex-1 border-r border-gray-200 pr-4">
+                <p class="text-lg font-semibold text-blue-600">USD</p>
+                <p class="text-xl font-bold">12,340</p>
+              </div>
+              <div class="flex flex-col items-center flex-1 border-r border-gray-200 px-4">
+                <p class="text-lg font-semibold text-purple-600">USDT</p>
+                <p class="text-xl font-bold">5,678</p>
+              </div>
+              <div class="flex flex-col items-center flex-1 pl-4">
+                <p class="text-lg font-semibold text-orange-600">UGX</p>
+                <p class="text-xl font-bold">18,900,000</p>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">Processed this month</p>
+          </div>
+
+          <!-- Wallet Balances -->
+          <div class="bg-white rounded-2xl shadow p-6 md:col-span-2">
+            <h2 class="text-sm font-bold mb-4 text-gray-700">Wallet Balances</h2>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>MTN: <span class="font-semibold">UGX 5,430,000</span></div>
+              <div>Airtel: <span class="font-semibold">UGX 2,010,000</span></div>
+              <div>TRX: <span class="font-semibold">1500 TRX</span></div>
+              <div>USDT: <span class="font-semibold">3500 USDT</span></div>
+              <div>USD: <span class="font-semibold">$1,200</span></div>
+            </div>
+          </div>
+
+          <!-- System Alerts -->
+          <div class="bg-white rounded-2xl shadow p-4">
+            <h2 class="text-sm font-bold mb-2 text-gray-700">System Alerts</h2>
+            <ul class="text-xs text-red-500 list-disc list-inside space-y-1">
+              <li>Low Airtel Wallet Balance</li>
+              <li>Pending Manual Request</li>
+              <li>Network Confirmation Delay</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+<section id="section-exchange" class="hidden-section">
+  <div class="bg-white rounded-2xl shadow p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-gray-700">Exchange Activity</h2>
+        <!-- Route Status Box -->
+<div class="border border-gray-300 rounded-lg p-4 shadow-sm overflow-x-auto mb-6">
+  <h2 class="text-lg font-semibold mb-3 text-gray-700">Route Status</h2>
+  <table class="w-full text-left text-sm table-auto">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="py-2 px-3 font-semibold">Route</th>
+        <th class="py-2 px-3 font-semibold">Profit</th>
+        <th class="py-2 px-3 font-semibold">Volume</th>
+        <th class="py-2 px-3 font-semibold">Failures</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b border-gray-200">
+        <td class="py-2 px-3">USDT to USD</td>
+        <td class="py-2 px-3">UGX 120,000</td>
+        <td class="py-2 px-3">5,000 USDT</td>
+        <td class="py-2 px-3">0</td>
+      </tr>
+      <tr class="border-b border-gray-200">
+        <td class="py-2 px-3">USDT to UGX</td>
+        <td class="py-2 px-3">UGX 200,000</td>
+        <td class="py-2 px-3">10,000 USDT</td>
+        <td class="py-2 px-3">1</td>
+      </tr>
+      <tr class="border-b border-gray-200">
+        <td class="py-2 px-3">USD to USDT</td>
+        <td class="py-2 px-3">UGX 150,000</td>
+        <td class="py-2 px-3">8,000 USD</td>
+        <td class="py-2 px-3">0</td>
+      </tr>
+      <tr>
+        <td class="py-2 px-3">UGX to USDT</td>
+        <td class="py-2 px-3">UGX 100,000</td>
+        <td class="py-2 px-3">4,000 UGX</td>
+        <td class="py-2 px-3">2</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <!-- Admin Activity Box -->
+        <div class="border border-gray-300 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <h2 class="text-lg font-semibold mb-3 text-gray-700">Admin Activity</h2>
+          <table class="w-full text-left text-sm table-auto">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="py-2 px-3 font-semibold">Date/Time</th>
+                <th class="py-2 px-3 font-semibold">Name</th>
+                <th class="py-2 px-3 font-semibold">IP Address</th>
+                <th class="py-2 px-3 font-semibold">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200">
+                <td class="py-2 px-3">2025-07-28 08:00</td>
+                <td class="py-2 px-3">Jamil Kasozi</td>
+                <td class="py-2 px-3">192.168.0.1</td>
+                <td class="py-2 px-3">Approved request</td>
+              </tr>
+              <tr class="border-b border-gray-200">
+                <td class="py-2 px-3">2025-07-28 09:15</td>
+                <td class="py-2 px-3">Admin User</td>
+                <td class="py-2 px-3">192.168.0.2</td>
+                <td class="py-2 px-3">Updated settings</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3">2025-07-28 10:45</td>
+                <td class="py-2 px-3">Support</td>
+                <td class="py-2 px-3">192.168.0.3</td>
+                <td class="py-2 px-3">Logged in</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+  <!-- Wallets Table Section -->
+      <section id="section-wallets" class="hidden-section">
+  <div class="bg-white rounded-2xl shadow p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-gray-700">User Wallets</h2>
+  <div id="walletsMainContent">
+<section class="bg-white rounded-2xl shadow p-6 mb-8">
+      <h2 class="text-lg font-semibold mb-4 text-gray-700">User Wallets</h2>
+<!-- Controls above the user table -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+  <!-- Total Users -->
+  <div class="bg-white rounded-lg shadow px-4 py-2 text-gray-700 font-semibold">
+    Total Users: <span class="text-orange-500">324</span>
+  </div>
+
+  <!-- Right-side controls: Search, Sort, Export -->
+  <div class="flex flex-col md:flex-row gap-4 items-center">
+    <!-- Search by Email -->
+    <div class="relative">
+      <input type="text" placeholder="Search by Email" class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+      <svg class="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+      </svg>
+    </div>
+
+    <!-- Sort Dropdown -->
+    <select class="py-2 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
+      <option value="">Sort by Status</option>
+      <option value="ACTIVE">ACTIVE</option>
+      <option value="BAN">BAN</option>
+      <option value="FREEZE">FREEZE</option>
+      <option value="DELETE">DELETE</option>
+    </select>
+
+    <!-- Export Button -->
+    <button class="bg-orange-400 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-orange-500 transition duration-200">
+      Export
+    </button>
+  </div>
+</div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-sm text-left text-gray-700">
+      <thead class="bg-gray-100 text-xs uppercase font-semibold text-gray-600">
+        <tr>
+          <th class="px-4 py-3">Date</th>
+          <th class="px-4 py-3">IDname</th>
+          <th class="px-4 py-3">Username</th>
+          <th class="px-4 py-3">Tel Num</th>
+          <th class="px-4 py-3">Email</th>
+          <th class="px-4 py-3">Wallet Address</th>
+          <th class="px-4 py-3">Bank Account</th>
+          <th class="px-4 py-3">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr>
+          <td class="px-4 py-3">2025-07-28</td>
+          <td class="px-4 py-3">001 - John Doe</td>
+          <td class="px-4 py-3">@john</td>
+          <td class="px-4 py-3">+256700000001</td>
+          <td class="px-4 py-3">john@example.com</td>
+          <td class="px-4 py-3 truncate">TX2aa8du8sdfg9sdfg239sdf82</td>
+          <td class="px-4 py-3">Stanbic-1234567890</td>
+          <td class="px-4 py-3">
+            <select class="border border-gray-300 text-sm rounded px-2 py-1">
+              <option class="text-green-600" selected>ACTIVE</option>
+              <option class="text-red-600">BAN</option>
+              <option class="text-yellow-600">FREEZE</option>
+              <option class="text-gray-600">DELETE</option>
+            </select>
+          </td>
+        </tr>
+        <!-- More rows can be added here -->
+      </tbody>
+    </table>
+  </div>
+</section>
+<div class="mt-8 flex justify-end">
+      <button id="userAuditBtn" class="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-200">
+        User Audit
+      </button>
+</div>
+</div>
+ <!-- User Audit Section (Initially Hidden) -->
+ <section id="userAuditSection" class="hidden bg-white rounded-2xl shadow p-6">
+  <h2 class="text-xl font-semibold mb-6 text-gray-800">User Audit</h2>
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-xl font-semibold text-gray-800">User Audit</h2>
+    <button id="backToWallets" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">← Back to Wallets</button>
+  </div>
+
+  <!-- Controls above the table -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+    <!-- Search by Email -->
+    <div class="relative flex-1 max-w-sm">
+      <input type="text" id="auditSearchEmail" placeholder="Search by Email"
+        class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 w-full" />
+      <svg class="w-5 h-5 absolute left-3 top-2.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+      </svg>
+    </div>
+
+    <!-- Sort by Date -->
+    <select id="auditSortDate"
+      class="py-2 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 max-w-xs">
+      <option value="">Sort by Date</option>
+      <option value="asc">Date Ascending</option>
+      <option value="desc">Date Descending</option>
+    </select>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-sm text-left text-gray-700">
+      <thead class="bg-gray-100 text-xs uppercase font-semibold text-gray-600">
+        <tr>
+          <th class="px-4 py-3">Date/Time</th>
+          <th class="px-4 py-3">Email</th>
+          <th class="px-4 py-3">IP Address</th>
+          <th class="px-4 py-3">Number of Transactions</th>
+          <th class="px-4 py-3">Volume</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200" id="auditTableBody">
+        <tr>
+          <td class="px-4 py-3">2025-07-28 09:00</td>
+          <td class="px-4 py-3">user1@example.com</td>
+          <td class="px-4 py-3">192.168.1.1</td>
+          <td class="px-4 py-3">45</td>
+          <td class="px-4 py-3">UGX 2,000,000</td>
+        </tr>
+        <tr>
+          <td class="px-4 py-3">2025-07-28 10:15</td>
+          <td class="px-4 py-3">user2@example.com</td>
+          <td class="px-4 py-3">192.168.1.2</td>
+          <td class="px-4 py-3">30</td>
+          <td class="px-4 py-3">UGX 1,200,000</td>
+        </tr>
+        <!-- More rows as needed -->
+      </tbody>
+    </table>
+  </div>
+</section>
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const walletsMainContent = document.getElementById("walletsMainContent");
+  const userAuditSection = document.getElementById("userAuditSection");
+  const userAuditBtn = document.getElementById("userAuditBtn");
+  const backToWalletsBtn = document.getElementById("backToWallets");
+
+  if (userAuditBtn && backToWalletsBtn && walletsMainContent && userAuditSection) {
+    userAuditBtn.addEventListener("click", () => {
+      walletsMainContent.classList.add("hidden");
+      userAuditSection.classList.remove("hidden");
+      console.log("Switched to User Audit");
+    });
+
+    backToWalletsBtn.addEventListener("click", () => {
+      userAuditSection.classList.add("hidden");
+      walletsMainContent.classList.remove("hidden");
+      console.log("Switched back to User Wallets");
+    });
+  }
+});
+
+</script>
+  </a>
+</div>
+      </section>
+<section id="section-walletalerts" class="hidden-section">
+  <div class="bg-white rounded-2xl shadow p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-gray-700">Wallet & Alerts</h2>
+  <div class="grid grid-cols-2 gap-6">
+    <!-- Error Log Box -->
+    <div class="h-72 bg-transparent border-2 border-gray-300 rounded-lg p-4 flex flex-col">
+      <h3 class="text-xl font-semibold text-gray-600 mb-4">Error Log</h3>
+      <div class="flex text-gray-700 font-semibold border-b border-gray-300 pb-2 mb-2">
+        <div class="w-1/4">Date/Time</div>
+        <div class="w-1/4">Error Code</div>
+        <div class="w-1/2">Description</div>
+      </div>
+      <div class="flex text-gray-600 mb-1">
+        <div class="w-1/4">2025-07-29 08:00</div>
+        <div class="w-1/4">ERR001</div>
+        <div class="w-1/2">Sample error description goes here.</div>
+      </div>
+      <div class="flex text-gray-600">
+        <div class="w-1/4">2025-07-29 09:30</div>
+        <div class="w-1/4">ERR002</div>
+        <div class="w-1/2">Another error description example.</div>
+      </div>
+    </div>
+
+    <!-- Low Balance Warnings Box -->
+    <div class="h-72 bg-transparent border-2 border-gray-300 rounded-lg p-4 flex flex-col">
+      <h3 class="text-xl font-semibold text-gray-600 mb-4">Low Balance Warnings</h3>
+      <div class="flex text-gray-700 font-semibold border-b border-gray-300 pb-2 mb-2">
+        <div class="w-1/4">Wallet Name</div>
+        <div class="w-1/4">Currency</div>
+        <div class="w-1/4">Balance</div>
+        <div class="w-1/4">Resolved</div>
+      </div>
+      <div class="flex text-gray-600 mb-1">
+        <div class="w-1/4">Main Wallet</div>
+        <div class="w-1/4">UGX</div>
+        <div class="w-1/4">5,000</div>
+        <div class="w-1/4">No</div>
+      </div>
+      <div class="flex text-gray-600">
+        <div class="w-1/4">Savings</div>
+        <div class="w-1/4">USD</div>
+        <div class="w-1/4">15</div>
+        <div class="w-1/4">Yes</div>
+      </div>
+    </div>
+
+    <!-- System Downtime Box -->
+<div class="flex flex-wrap gap-6">
+
+  <!-- System Downtime Box (Wider) -->
+  <div class="flex-1 min-w-[60%] bg-white bg-opacity-80 border border-gray-300 rounded-xl p-6 shadow-md">
+    <h3 class="text-xl font-semibold text-gray-700 mb-4">System Downtime</h3>
+
+    <div class="grid grid-cols-4 gap-4 text-sm font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-2">
+      <div>Date</div>
+      <div>Cause</div>
+      <div>Duration</div>
+      <div>Affected System</div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4 text-sm text-gray-600 mb-1">
+      <div>2025-07-28</div>
+      <div>Power Outage at HQ</div>
+      <div>1h 15min</div>
+      <div>Backend API</div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4 text-sm text-gray-600">
+      <div>2025-07-27</div>
+      <div>Network Downtime</div>
+      <div>45min</div>
+      <div>Payment Gateway</div>
+    </div>
+  </div>
+
+  <!-- Notifications Setup Box (With Spacing) -->
+  <div class="w-[30%] min-w-[250px] bg-white bg-opacity-80 border border-gray-300 rounded-xl p-6 shadow-md">
+    <h3 class="text-xl font-semibold text-gray-700 mb-4">Notifications Setup</h3>
+    <p class="text-gray-600 mb-3">Choose your preferred alert methods:</p>
+    <div class="flex flex-col gap-3">
+      <label class="flex items-center space-x-2">
+        <input type="checkbox" class="accent-blue-500 w-4 h-4">
+        <span class="text-gray-700">SMS</span>
+      </label>
+      <label class="flex items-center space-x-2">
+        <input type="checkbox" class="accent-green-500 w-4 h-4">
+        <span class="text-gray-700">WhatsApp</span>
+      </label>
+      <label class="flex items-center space-x-2">
+        <input type="checkbox" class="accent-purple-500 w-4 h-4">
+        <span class="text-gray-700">Email</span>
+      </label>
+    </div>
+  </div>
+
+</div>
+</section>
+<section id="section-manualrequests" class="hidden-section">
+  <div class="bg-white rounded-2xl shadow p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-gray-700">Manual Requests</h2>
+<div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-300">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 py-2 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Email</th>
+            <th class="px-4 py-2 border-b border-gray-300 text-left text-sm font-medium text-gray-700">USD</th>
+            <th class="px-4 py-2 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Account Number</th>
+            <th class="px-4 py-2 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">user1@example.com</td>
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">$150</td>
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">1234567890</td>
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">
+              <select class="border rounded px-2 py-1 text-sm">
+                <option value="done" selected>DONE</option>
+                <option value="rejected">REJECTED</option>
+              </select>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">user2@example.com</td>
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">$200</td>
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">9876543210</td>
+            <td class="px-4 py-2 border-b border-gray-300 text-sm text-gray-800">
+              <select class="border rounded px-2 py-1 text-sm">
+                <option value="done">DONE</option>
+                <option value="rejected" selected>REJECTED</option>
+              </select>
+            </td>
+          </tr>
+          <!-- Add more rows as needed -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+    <!-- Transfers by Admin and Export side by side -->
+    <div class="flex justify-between items-start gap-6">
+      <!-- Transfers by Admin -->
+      <div class="flex-1 bg-gray-50 rounded-lg p-4 shadow-sm">
+        <h3 class="text-md font-semibold mb-4 text-gray-700">Transfers by Admin</h3>
+
+        <!-- Wallet Address -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-600 mb-1" for="walletAddress">Wallet Address</label>
+          <input type="text" id="walletAddress" placeholder="Enter wallet address" class="w-full border border-gray-300 rounded px-3 py-2 mb-2" />
+          <input type="number" step="0.01" placeholder="USDT Amount" class="w-full border border-gray-300 rounded px-3 py-2 mb-2" />
+          <input type="text" placeholder="Reason" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+
+        <!-- MoMo Number -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-600 mb-1" for="momoNumber">MoMo Number</label>
+          <input type="tel" id="momoNumber" placeholder="Enter MoMo number" class="w-full border border-gray-300 rounded px-3 py-2 mb-2" />
+          <input type="number" placeholder="UGX Amount" class="w-full border border-gray-300 rounded px-3 py-2 mb-2" />
+          <input type="text" placeholder="Reason" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+
+        <!-- Airtel Number -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1" for="airtelNumber">Airtel Number</label>
+          <input type="tel" id="airtelNumber" placeholder="Enter Airtel number" class="w-full border border-gray-300 rounded px-3 py-2 mb-2" />
+          <input type="number" placeholder="UGX Amount" class="w-full border border-gray-300 rounded px-3 py-2 mb-2" />
+          <input type="text" placeholder="Reason" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+      </div>
+
+      <!-- Export -->
+      <div class="w-1/3 bg-gray-50 rounded-lg p-4 shadow-sm">
+        <h3 class="text-md font-semibold mb-4 text-gray-700">Export</h3>
+        <!-- You can add export button or features here -->
+        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Export Data</button>
+      </div>
+    </div>
+
+    <!-- Submit button below Transfers and Export -->
+    <div class="mt-6 text-right">
+      <button
+        type="submit"
+        class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+  <section>
+  <section id="section-adminsettings" class="hidden-section bg-white p-6 rounded-xl shadow max-w-5xl w-full mx-auto mt-6">
+        <h2 class="text-xl font-bold mb-4">Admin Settings</h2>
+        <p>Admin content here</p>
+      </section>
+
+      <!-- Section: Reports Center -->
+      <section id="section-reportscenter" class="hidden-section bg-white p-6 rounded-xl shadow max-w-5xl w-full mx-auto mt-6">
+        <h2 class="text-xl font-bold mb-4">Reports Center</h2>
+        <p>Reports content here</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+const menuItems = [
+  { id: 'menu-overview', section: 'section-overview', title: 'System Overview' },
+  { id: 'menu-exchange', section: 'section-exchange', title: 'Exchange Activity' },
+  { id: 'menu-wallets', section: 'section-wallets', title: 'User Wallets' },
+  { id: 'menu-walletalerts', section: 'section-walletalerts', title: 'Wallet & Alerts' },
+  { id: 'menu-manualrequests', section: 'section-manualrequests', title: 'Manual Requests' },
+  { id: 'menu-adminsettings', section: 'section-adminsettings', title: 'Admin Settings' },
+  { id: 'menu-reportscenter', section: 'section-reportscenter', title: 'Reports Center' }
+];
+
+function hideAllSections() {
+  menuItems.forEach(item => {
+    const sectionEl = document.getElementById(item.section);
+    if (sectionEl) sectionEl.classList.add('hidden-section');
+  });
+}
+
+function clearHighlights() {
+  menuItems.forEach(item => {
+    const menuEl = document.getElementById(item.id);
+    if (menuEl) {
+      const span = menuEl.querySelector('span');
+      if (span) span.classList.remove('text-orange-400', 'font-bold');
+    }
+  });
+}
+
+menuItems.forEach(item => {
+  const menuEl = document.getElementById(item.id);
+  if (!menuEl) return;
+
+  menuEl.addEventListener('click', () => {
+    hideAllSections();
+    clearHighlights();
+
+    const sectionEl = document.getElementById(item.section);
+    if (sectionEl) sectionEl.classList.remove('hidden-section');
+
+    const span = menuEl.querySelector('span');
+    if (span) span.classList.add('text-orange-400', 'font-bold');
+
+    const pageTitle = document.getElementById('page-title');
+    if (pageTitle) pageTitle.textContent = item.title;
+  });
+});
+
+
+    // Chart.js for transaction trends in System Overview
+    const ctx = document.getElementById('transactionChart').getContext('2d');
+
+    // Original smooth data for week and daily
+    const weekData = {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Transactions',
+        data: [120, 200, 150, 170, 210, 230, 220],
+        fill: true,
+        backgroundColor: 'rgba(251,146,60,0.3)',
+        borderColor: 'rgba(251,146,60,1)',
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: 'rgba(251,146,60,1)',
+      }]
+    };
+
+    const dailyData = {
+      labels: ['12 AM', '4 AM', '8 AM', '12 PM', '4 PM', '8 PM', '12 AM'],
+      datasets: [{
+        label: 'Transactions',
+        data: [30, 50, 40, 60, 80, 70, 50],
+        fill: true,
+        backgroundColor: 'rgba(251,146,60,0.3)',
+        borderColor: 'rgba(251,146,60,1)',
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: 'rgba(251,146,60,1)',
+      }]
+    };
+
+    let currentChart = new Chart(ctx, {
+      type: 'line',
+      data: weekData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // Tab toggles
+    const tabWeek = document.getElementById('tab-week');
+    const tabDaily = document.getElementById('tab-daily');
+
+    tabWeek.addEventListener('click', () => {
+      currentChart.data = weekData;
+      currentChart.update();
+      tabWeek.classList.add('bg-orange-400', 'text-white');
+      tabDaily.classList.remove('bg-orange-400', 'text-white');
+      tabDaily.classList.add('bg-gray-200', 'text-gray-600');
+    });
+
+    tabDaily.addEventListener('click', () => {
+      currentChart.data = dailyData;
+      currentChart.update();
+      tabDaily.classList.add('bg-orange-400', 'text-white');
+      tabWeek.classList.remove('bg-orange-400', 'text-white');
+      tabWeek.classList.add('bg-gray-200', 'text-gray-600');
+    });
+
+    // Init view
+    document.getElementById('section-reportscenter').classList.remove('hidden-section');
+document.getElementById('menu-reportscenter').querySelector('span').classList.add('text-orange-400', 'font-bold');
+  </script>
+</body>
+</html>
